@@ -10,7 +10,7 @@ class Token():
 		return 'Token({type},{value})'.format(type = self.type, value = repr(self.value))
 #lexer
 class Lexer():
-	def__init__(self, text):
+	def __init__(self, text):
 	self.text = text
 	#Start from the first character
 	self.pos = 0
@@ -21,11 +21,11 @@ class Lexer():
 
 	#advance to the next character
 	def next(self):
-		self.pos +=1
-		if self.pos > len(text) -1:
-			self.current_char = None
-		else:
-			self.current_char = self.text[self.pos]
+        self.pos +=1
+        if self.pos > len(self.text) -1:
+            self.current_char = None
+        else:
+            self.current_char = self.text[self.pos]
 
 	#skipping white spaces
 	def skipwhitespace(self):
@@ -34,12 +34,42 @@ class Lexer():
 
 	#multiple digits
 	def num(self):
-		result = ""
-		while self.current_char is not None and self.current_char.indigit():
-			result = rusult + self.current_char
-		return int(result)
+        result = ""
+        while self.current_char is not None and self.current_char.isdigit():
+            result = result + self.current_char
+            self.next()
+        return int(result)
+
+    #return lexical token one at a time
+    def tokenize(self):
+    	#nicer than elif, return breaks the loop
+    	while self.current_char is not None:
+    		
+    		if self.current_char.isspace():
+    			self.next()
+
+    		if self.current_char.isdigit():
+    			value = self.num()
+    			return Token("INTEGER", value)
+    		
+    		if self.current_char == "+":
+    			self.next()
+    			return Token("PLUS", "+")
+
+    		if self.current_char == "-":
+    			self.next()
+    			return Token("MINUS", "-")
+
+    		if self.current_char == "*":
+    			self.next()
+    			return Token("MUL", "*")
+
 #Parser
 #Parse the tokens into an AST
+class Paser():
+	def __init__(self, text):
+		self.text = text
+
 
 #Interpreter
 #Evaluate the programing with AST
