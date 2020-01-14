@@ -33,7 +33,11 @@ class Lexer():
 			self.next()
 
 	#multiple digits
-	def
+	def num(self):
+		result = ""
+		while self.current_char is not None and self.current_char.indigit():
+			result = rusult + self.current_char
+		return int(result)
 #Parser
 #Parse the tokens into an AST
 
