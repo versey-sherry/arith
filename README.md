@@ -21,10 +21,10 @@ The grammar in the homework is
 However, to capture the order of predence, my grammar is
 ```
 <expr> ::== <trm>
-          | <trm> + <trm>
-          | <trm> - <trm>
+          | <expr> + <trm>
+          | <expr> - <trm>
 <trm> ::== <fac>
-          |<fac> * <fac>
+          |<fac> * <trm>
 <fac> ::== <int>
 ```  
 The AST is generated with this grammar.
