@@ -123,13 +123,13 @@ class Parser():
 		if token.type == "MINUS":
 			self.current_token = self.lexer.tokenize()
 			token = self.current_token
-			print('first',token.value)
+			#print('first',token.value)
 			token.value = -token.value
-			print(token.value)
+			#print(token.value)
 			node = IntNode(token)
 		elif token.type == "INTEGER":
 			node = IntNode(token)
-			print(node.value)
+			#print(node.value)
 		else:
 			self.error()
 
