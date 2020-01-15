@@ -21,8 +21,8 @@ The grammar in the homework is
 However, to capture the order of predence, my grammar is
 ```
 <expr> ::== <trm>
-          | <trm> + <trm>
-          | <trm> - <trm>
+          | <trm> + <expr>
+          | <trm> - <expr>
 <trm> ::== <fac>
           |<fac> * <trm>
 <fac> ::== <int>
