@@ -140,26 +140,28 @@ class Parser():
 	def term(self):
 		node = self.factor()
 		token = self.current_token
+		#print("in term", token.value)
 		if token.type == "MUL":
-			print("gotmul")
+			#print("got mul")
 			self.current_token = self.lexer.tokenize()
-			node = MulNode(left = node, right = self.factor())
-			print(node.left, node.right)
+			node = MulNode(left = node, right = self.term())
+			#print("in term",node.left, node.right)	
 		return node
 
 	#Evaluate plus and minus and create nodes
 	def expr(self):
 		node = self.term()
 		token = self.current_token 
-
+		#print("in expression", token.value)
 		if token.type == "PLUS":
-			print("gotplus")
+			#print("got plus")
 			self.current_token = self.lexer.tokenize()
-			node = PlusNode(left = node, right = self.term())
+			node = PlusNode(left = node, right = self.expr())
+			#print(node.left, node.right)
 		elif token.type == "MINUS":
 			self.current_token = self.lexer.tokenize()
-			node = MinusNode(left = node, right = self.term())
-			print(node.left, node.right)
+			node = MinusNode(left = node, right = self.expr())
+			#print("in expr",node.left, node.right)
 		return node
 
 	def parse(self):
@@ -167,31 +169,58 @@ class Parser():
 
 #Interpreter
 #Evaluate the programing with AST
-class Interpreter():
-	def __init__(self, node):
-		#This is the top level computing node
-		self.node = node
-
-	def evaluate(self):
-		node = self.node
-		if node.op == "INTEGER":
+def evaluate(node):
+	if node.op == "INTEGER":
 			return(node.value)
+	elif node.op == "MUL":
+		return (evaluate(node.left) * evaluate(node.right))
+	elif node.op =="PLUS":
+		return (evaluate(node.left) + evaluate(node.right))
+	elif node.op == "MINUS":
+		return (evaluate(tree.left) - evaluate(tree.right))
 
-text = "-124+5*5"
+
+class Interpreter():
+	def __init__(self, tree):
+		#Tree is represented by the root node of the tree
+		self.tree = tree
+	
+	#for tree checking
+	def load_tree(self):
+		print(self.tree.op)
+		print(self.tree.left.op)
+		print(self.tree.right.op)
+	
+	def error(self):
+		raise Error("This feature is not supported")
+
+	def visit(self):
+		tree = self.tree
+		return evaluate(tree)
+'''
+text = "1*2*3*4*5"
 lex = Lexer(text)
 par = Parser(lex)
-par.parse()
+tree = par.parse()
+inter = Interpreter(tree)
+#inter.load_tree()
+print(inter.visit())
+
 '''
 def main():
 	while True:
 		try:
 			#Taking raw inputs
-			text = input()
+			text = input("start>")
 		except EOFError:
 			break
 
 		lexer = Lexer(text)
 		parser = Parser(lexer)
-		Interpreter(parser.parse())
+		tree = parser.parse()
+		interpreter = Interpreter(tree)
+		print(interpreter.visit())
 
-'''
+
+if __name__ == '__main__':
+	main()
