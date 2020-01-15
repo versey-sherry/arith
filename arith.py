@@ -13,21 +13,21 @@ class Token():
 #lexer
 class Lexer():
 	def __init__(self, text):
-	self.text = text
-	#Start from the first character
-	self.pos = 0
-	self.current_char = self.text[self.pos]
+		self.text = text
+		#Start from the first character
+		self.pos = 0
+		self.current_char = self.text[self.pos]
 
 	def error(self):
 		raise Exception("Invalid inputs")
 
 	#advance to the next character
 	def next(self):
-        self.pos +=1
-        if self.pos > len(self.text) -1:
-            self.current_char = None
-        else:
-            self.current_char = self.text[self.pos]
+		self.pos +=1
+		if self.pos > len(self.text) -1:
+			self.current_char = None
+		else:
+			self.current_char = self.text[self.pos]
 
 	#skipping white spaces
 	def skipwhitespace(self):
@@ -36,39 +36,39 @@ class Lexer():
 
 	#multiple digits
 	def num(self):
-        result = ""
-        while self.current_char is not None and self.current_char.isdigit():
-            result = result + self.current_char
-            self.next()
-        return int(result)
+		result = ''
+		while self.current_char is not None and self.current_char.isdigit():
+			result = result + self.current_char
+			self.next()
 
-    #return lexical token one at a time
-    def tokenize(self):
-    	#nicer than elif, return breaks the loop
-    	while self.current_char is not None:
-    		
-    		if self.current_char.isspace():
-    			self.next()
+		return int(result)
 
-    		if self.current_char.isdigit():
-    			value = self.num()
-    			return Token("INTEGER", value)
-    		
-    		if self.current_char == "+":
-    			self.next()
-    			return Token("PLUS", "+")
+	#return lexical token one at a time
+	def tokenize(self):
+		#nicer than elif, return breaks the loop
+		while self.current_char is not None:
+	
+			if self.current_char.isspace():
+				self.next()
 
-    		if self.current_char == "-":
-    			self.next()
-    			return Token("MINUS", "-")
+			if self.current_char.isdigit():
+				return Token("INTEGER", self.num())
 
-    		if self.current_char == "*":
-    			self.next()
-    			return Token("MUL", "*")
+			if self.current_char == "+":
+				self.next()
+				return Token("PLUS", "+")
 
-    		self.error()
+			if self.current_char == "-":
+				self.next()
+				return Token("MINUS", "-")
 
-    	return(Token("EOF", None))
+			if self.current_char == "*":
+				self.next()
+				return Token("MUL", "*")
+
+			self.error()
+
+		return(Token("EOF", None))
 
 #Parser
 #Parse the tokens into an AST
@@ -102,11 +102,13 @@ class MulNode():
 #For positive negative integers, operations that only happen to the one token after it
 class OnaryNode():
 	def __init__(self, token):
+		pass
 
-class Int():
+#A node for all the integers
+class IntNode():
 	def __init__(self, token):
-
-
+		self.token = token
+		self.value = self.token.value
 
 class Parser():
 	def __init__(self, lexer):
@@ -117,8 +119,6 @@ class Parser():
 
 	def error():
 		raise error("Invalid syntax.")
-
-
 
 #Interpreter
 #Evaluate the programing with AST
