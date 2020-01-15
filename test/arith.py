@@ -1,3 +1,5 @@
+
+#!/usr/bin/python
 #I mainly followed this post https://ruslanspivak.com/lsbasi-part7/
 
 #Lexer
@@ -72,9 +74,6 @@ class Lexer():
 
 #Parser
 #Parse the tokens into an AST
-class AST():
-	pass
-
 class PlusNode():
 	#some value from term
 	#some value form expression
@@ -177,7 +176,7 @@ def evaluate(node):
 	elif node.op =="PLUS":
 		return (evaluate(node.left) + evaluate(node.right))
 	elif node.op == "MINUS":
-		return (evaluate(tree.left) - evaluate(tree.right))
+		return (evaluate(node.left) - evaluate(node.right))
 
 
 class Interpreter():
@@ -211,7 +210,7 @@ def main():
 	while True:
 		try:
 			#Taking raw inputs
-			text = input("start>")
+			text = input("")
 		except EOFError:
 			break
 
