@@ -78,7 +78,7 @@ class AST():
 class PlusNode():
 	#some value from term
 	#some value form expression
-	def __init__(self, left, op, right):
+	def __init__(self, left, right):
 		self.left = left
 		self.right = right
 		self.op = "PLUS"
@@ -86,7 +86,7 @@ class PlusNode():
 class MinusNode():
 	#some value from term
 	#some value form expression
-	def __init__(self, left, op, right):
+	def __init__(self, left, right):
 		self.left = left
 		self.right = right
 		self.op = "MINUS"
@@ -94,7 +94,7 @@ class MinusNode():
 class MulNode():
 	#some factor
 	#some value from term
-	def __init__(self, left, op, right):
+	def __init__(self, left, right):
 		self.left = left
 		self.right = right
 		self.op = "MUL"
@@ -119,6 +119,38 @@ class Parser():
 
 	def error():
 		raise error("Invalid syntax.")
+
+	#Only evaluate integers and create num node
+	def factor(self):
+		token = self.current_token
+		if token.type == "INTEGER":
+			node = IntNode(token)
+			self.current_token = self.lexer.tokenize()
+			return node
+
+	#Only evaluate multiplication and create mul node
+	def term(self):
+		node = self.factor()
+		token = self.current_token
+		if token.type == "MUL":
+			self.current_token = self.lexer.tokenize()
+			node = MulNode(left = node, right = self.factor())
+			return node
+
+
+	#Evaluate plus and minus and create nodes
+	def expr(self):
+		node = self.term()
+		token = self.current_token 
+		if token.type = "PLUS":
+			self.current_token = self.lexer.tokenize()
+			node = PlusNode(left = node, right = self.term())
+		elif token.type = "MINUS":
+			node = MinusNode(left = node, right = self.term())
+		return node
+
+	def parse(self):
+		return self.expr()
 
 #Interpreter
 #Evaluate the programing with AST
