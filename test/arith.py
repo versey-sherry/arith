@@ -72,6 +72,9 @@ class Lexer():
 
 #Parser
 #Parse the tokens into an AST
+class AST():
+	pass
+
 class PlusNode():
 	#some value from term
 	#some value form expression
