@@ -104,6 +104,7 @@ class IntNode():
 	def __init__(self, token):
 		self.token = token
 		self.value = self.token.value
+		self.op = "INTEGER"
 
 
 class Parser():
@@ -122,37 +123,43 @@ class Parser():
 		if token.type == "MINUS":
 			self.current_token = self.lexer.tokenize()
 			token = self.current_token
+			print('first',token.value)
 			token.value = -token.value
+			print(token.value)
 			node = IntNode(token)
-			#print(node.value)
 		elif token.type == "INTEGER":
 			node = IntNode(token)
-			#print(node.value)
-			self.current_token = self.lexer.tokenize()
-			return node
+			print(node.value)
 		else:
 			self.error()
+
+		self.current_token = self.lexer.tokenize()		
+		return node
 
 	#Only evaluate multiplication and create mul node
 	def term(self):
 		node = self.factor()
 		token = self.current_token
 		if token.type == "MUL":
+			print("gotmul")
 			self.current_token = self.lexer.tokenize()
 			node = MulNode(left = node, right = self.factor())
-			#print(node.left, node.right)
+			print(node.left, node.right)
 		return node
 
 	#Evaluate plus and minus and create nodes
 	def expr(self):
 		node = self.term()
 		token = self.current_token 
+
 		if token.type == "PLUS":
+			print("gotplus")
 			self.current_token = self.lexer.tokenize()
 			node = PlusNode(left = node, right = self.term())
 		elif token.type == "MINUS":
+			self.current_token = self.lexer.tokenize()
 			node = MinusNode(left = node, right = self.term())
-			#print(node.left, node.right)
+			print(node.left, node.right)
 		return node
 
 	def parse(self):
@@ -160,8 +167,21 @@ class Parser():
 
 #Interpreter
 #Evaluate the programing with AST
+class Interpreter():
+	def __init__(self, node):
+		#This is the top level computing node
+		self.node = node
 
+	def evaluate(self):
+		node = self.node
+		if node.op == "INTEGER":
+			return(node.value)
 
+text = "-124+5*5"
+lex = Lexer(text)
+par = Parser(lex)
+par.parse()
+'''
 def main():
 	while True:
 		try:
@@ -172,4 +192,6 @@ def main():
 
 		lexer = Lexer(text)
 		parser = Parser(lexer)
+		Interpreter(parser.parse())
 
+'''
