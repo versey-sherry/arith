@@ -99,16 +99,12 @@ class MulNode():
 		self.right = right
 		self.op = "MUL"
 
-#For positive negative integers, operations that only happen to the one token after it
-class OnaryNode():
-	def __init__(self, token):
-		pass
-
 #A node for all the integers
 class IntNode():
 	def __init__(self, token):
 		self.token = token
 		self.value = self.token.value
+
 
 class Parser():
 	def __init__(self, lexer):
@@ -123,10 +119,19 @@ class Parser():
 	#Only evaluate integers and create num node
 	def factor(self):
 		token = self.current_token
-		if token.type == "INTEGER":
+		if token.type == "MINUS":
+			self.current_token = self.lexer.tokenize()
+			token = self.current_token
+			token.value = -token.value
 			node = IntNode(token)
+			#print(node.value)
+		elif token.type == "INTEGER":
+			node = IntNode(token)
+			#print(node.value)
 			self.current_token = self.lexer.tokenize()
 			return node
+		else:
+			self.error()
 
 	#Only evaluate multiplication and create mul node
 	def term(self):
@@ -135,18 +140,19 @@ class Parser():
 		if token.type == "MUL":
 			self.current_token = self.lexer.tokenize()
 			node = MulNode(left = node, right = self.factor())
-			return node
-
+			#print(node.left, node.right)
+		return node
 
 	#Evaluate plus and minus and create nodes
 	def expr(self):
 		node = self.term()
 		token = self.current_token 
-		if token.type = "PLUS":
+		if token.type == "PLUS":
 			self.current_token = self.lexer.tokenize()
 			node = PlusNode(left = node, right = self.term())
-		elif token.type = "MINUS":
+		elif token.type == "MINUS":
 			node = MinusNode(left = node, right = self.term())
+			#print(node.left, node.right)
 		return node
 
 	def parse(self):
@@ -155,6 +161,7 @@ class Parser():
 #Interpreter
 #Evaluate the programing with AST
 
+
 def main():
 	while True:
 		try:
@@ -162,4 +169,7 @@ def main():
 			text = input()
 		except EOFError:
 			break
+
+		lexer = Lexer(text)
+		parser = Parser(lexer)
 
