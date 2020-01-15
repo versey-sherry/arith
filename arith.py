@@ -1,3 +1,5 @@
+#I mainly followed this post https://ruslanspivak.com/lsbasi-part7/
+
 #Lexer
 #Tokenize the inputs
 #Token type PLUS MUL MINUS INTEGER
@@ -64,11 +66,58 @@ class Lexer():
     			self.next()
     			return Token("MUL", "*")
 
+    		self.error()
+
+    	return(Token("EOF", None))
+
 #Parser
 #Parse the tokens into an AST
-class Paser():
-	def __init__(self, text):
-		self.text = text
+class AST():
+	pass
+
+class PlusNode():
+	#some value from term
+	#some value form expression
+	def __init__(self, left, op, right):
+		self.left = left
+		self.right = right
+		self.op = "PLUS"
+
+class MinusNode():
+	#some value from term
+	#some value form expression
+	def __init__(self, left, op, right):
+		self.left = left
+		self.right = right
+		self.op = "MINUS"
+
+class MulNode():
+	#some factor
+	#some value from term
+	def __init__(self, left, op, right):
+		self.left = left
+		self.right = right
+		self.op = "MUL"
+
+#For positive negative integers, operations that only happen to the one token after it
+class OnaryNode():
+	def __init__(self, token):
+
+class Int():
+	def __init__(self, token):
+
+
+
+class Parser():
+	def __init__(self, lexer):
+		#initially the pos is at 0. self.current_token returns the token for the current char
+		#tokenize also move pos to the next one and record the next char for lexer.
+		self.lexer = lexer
+		self.current_token = self.lexer.tokenize()
+
+	def error():
+		raise error("Invalid syntax.")
+
 
 
 #Interpreter
