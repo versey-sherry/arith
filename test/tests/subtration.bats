@@ -1,7 +1,7 @@
 load harness
 
 @test "subtration-1" {
-  check '3-2' '-1'
+  check '3-2' '1'
 }
 
 @test "subtration-2" {
@@ -21,9 +21,9 @@ load harness
 }
 
 @test "subtration-multiple-2" {
-  check '10 -3 -1 ' '6'
+  check '10 -3 -1' '6'
 }
 
 @test "asubtration-multiple-3" {
-  check '-1 - -2 - 3' '-6'
+  check '-1 - -2 - 3' '-2'
 }

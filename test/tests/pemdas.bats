@@ -11,3 +11,11 @@ load harness
 @test "pemdas-3" {
   check '3 * 8 + 9 * 10' '114'
 }
+
+@test "pemdas-3" {
+  check '3 * 8 + 9 * 10-8' '106'
+}
+
+@test "pemdas-3" {
+  check '3 * 8 + 9 * 10- -8' '122'
+}

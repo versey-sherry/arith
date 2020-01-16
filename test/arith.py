@@ -1,10 +1,13 @@
 
-#!/usr/bin/python
-#I mainly followed this post https://ruslanspivak.com/lsbasi-part7/
+#!/usr/bin/env python3
 
+#I mainly followed this post https://ruslanspivak.com/lsbasi-part7/
 #Lexer
 #Tokenize the inputs
 #Token type PLUS MUL MINUS INTEGER
+import sys
+sys.tracebacklimit=0
+
 class Token():
 	def __init__(self, type, value):
 		self.type = type
@@ -138,29 +141,32 @@ class Parser():
 	#Only evaluate multiplication and create mul node
 	def term(self):
 		node = self.factor()
-		token = self.current_token
-		#print("in term", token.value)
-		if token.type == "MUL":
-			#print("got mul")
-			self.current_token = self.lexer.tokenize()
-			node = MulNode(left = node, right = self.term())
-			#print("in term",node.left, node.right)	
+		while self.current_token.type == "MUL":
+			token = self.current_token
+			#print("in term", token.value)
+			if token.type == "MUL":
+				#print("got mul")
+				self.current_token = self.lexer.tokenize()
+				node = MulNode(left = node, right = self.factor())
+				#print("in term",node.left, node.right)	
 		return node
 
 	#Evaluate plus and minus and create nodes
 	def expr(self):
-		node = self.term()
-		token = self.current_token 
+		node = self.term()	
 		#print("in expression", token.value)
-		if token.type == "PLUS":
-			#print("got plus")
-			self.current_token = self.lexer.tokenize()
-			node = PlusNode(left = node, right = self.expr())
-			#print(node.left, node.right)
-		elif token.type == "MINUS":
-			self.current_token = self.lexer.tokenize()
-			node = MinusNode(left = node, right = self.expr())
-			#print("in expr",node.left, node.right)
+		while self.current_token.type in ("PLUS", "MINUS"):
+			token = self.current_token 
+			if token.type == "PLUS":
+				#print("got plus")
+				self.current_token = self.lexer.tokenize()
+				node = PlusNode(left = node, right = self.term())
+				#print(node.left, node.right)
+			elif token.type == "MINUS":
+				#print("got minus")
+				self.current_token = self.lexer.tokenize()
+				node = MinusNode(left = node, right = self.term())
+				#print("in expr",node.left, node.right)
 		return node
 
 	def parse(self):
@@ -177,7 +183,6 @@ def evaluate(node):
 		return (evaluate(node.left) + evaluate(node.right))
 	elif node.op == "MINUS":
 		return (evaluate(node.left) - evaluate(node.right))
-
 
 class Interpreter():
 	def __init__(self, tree):
@@ -197,7 +202,7 @@ class Interpreter():
 		tree = self.tree
 		return evaluate(tree)
 '''
-text = "1*2*3*4*5"
+text = "45-3-7-2"
 lex = Lexer(text)
 par = Parser(lex)
 tree = par.parse()

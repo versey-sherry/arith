@@ -10,6 +10,7 @@ arith has three features, addition, multiplication and subtraction. Operations a
 
 ### Requirements:
 python3 >=3.6
+pyinstaller ==3.6
 
 ### Grammar
 The grammar in the homework is
@@ -21,10 +22,10 @@ The grammar in the homework is
 However, to capture the order of predence, my grammar is
 ```
 <expr> ::== <trm>
-          | <trm> + <expr>
-          | <trm> - <expr>
+          | <expr> + <trm>
+          | <expr> - <trm>
 <trm> ::== <fac>
-          |<fac> * <trm>
+          |<trm> * <fac>
 <fac> ::== <int>
 ```  
 The AST is generated with this grammar.
